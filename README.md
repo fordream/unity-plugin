@@ -3,18 +3,16 @@ GreedyGame Unity Integration Guide
 
 This is a complete guide to integrate GreedyGame plugin within your unity game. You can download [GreedyGame_v7.4.4.unitypackage](current-sdk/GreedyGame_v7.4.4.unitypackage).
 
-### Ads that people love
 
-![SharedAdUnit MonoBehaviour](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/1_branded_game.png?raw=true "SharedAdUnit MonoBehaviour attached to Stockcar/Body_Complete" )
-
-
-## Steps
-
-### 1. Import Plugin Package
+## Import Plugin Package
 * **TopMenu**: *Assets > Import Package > Custom Package*
 * Import GreedyGame_v6.package into your unity project.
 
-### 2. Select GameObject for branding
+
+## Native Ads
+![SharedAdUnit MonoBehaviour](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/1_branded_game.png?raw=true "SharedAdUnit MonoBehaviour attached to Stockcar/Body_Complete" )
+
+### 1. Select GameObject for branding
 * Attach complie MonoBehaviour **AdUnit** or **SharedAdUnit**  to GameObject having **Renderer**.
 * Supported Renderers are Mesh, Plan, Cloth and Sprite (only with SharedAdUnit).
 * GameObject must having 2D texture.
@@ -26,7 +24,7 @@ This is a complete guide to integrate GreedyGame plugin within your unity game. 
  2. 2D texture, will be used for branded assets, such as logo, product image etc.
  3. MeshRender will be used as renderer to blend branding image over object
 
-### 3. Setting up with Server
+### 2. Setting up with Server
 * Using TopMenu: *GreedyGame > DynamicUnitManager*
 * Login using panel's credential.
 * Build and sync unit list.
@@ -36,44 +34,32 @@ This is a complete guide to integrate GreedyGame plugin within your unity game. 
 > ![Refresh UnitList](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/5_refresh_save.png?raw=true "list of units to be used for branding" )
  1. **GameProfileId**, game-id from panel.greedygame.com
  2. **LoadingLevel**, will be used for fetching and loading campaign assets
+ 3. **Save**, will upload images to server and create GlobalConfig objects at LoadingLevel
 
- **Buttons**
- 
-| Refresh       | Save       | Export      |
-| ------------- | ----------- | ----------- |
-| Create list of units to be used for branding    | Sync list with server and register as ad-unit | Export ad-unit  as package rar |
-
-**Indicators**
-* **Yellow** indicates unit has been added
-* **Green** indicates unit has synced to server
-* **Red** indicates unit cannot to added or invalid 
-
-### 4. Manage campagin fetching and post loading scene
+### 3. Manage campagin fetching and post loading scene
 * Attach sample script `GreedyCampaignLoader.cs` with loading scene's object.
-	* PostScene : Scene to load after campaign get fetched
-	* Loading : Loading asset's texture
 
+## Floating Ad-Head
 
-### 5. Add Floating Ad-Head
+![SharedAdUnit MonoBehaviour](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/7_float_ad.png?raw=true "SharedAdUnit MonoBehaviour attached to Stockcar/Body_Complete" )
+
 * Attach `AdHeadLoader.cs` with respective scene's object to fetch floating AdHead on that scene.
-	* Set-up ad-unit manually on panel.greedygame.com/games/<game_namespace>/units 
-	* AdUnit : Panel's ad-unit to fetch specific unit from server. 
+  * Set-up ad-unit manually on panel.greedygame.com/games/**GAMEPROFILE_ID**/units 
+  * AdUnit : Panel's ad-unit to fetch specific unit from server. 
 ```csharp
 private GreedyAdManager ggAdManager = null;
 void Awake (){
-	ggAdManager = GreedyAdManager.Instance;
+  ggAdManager = GreedyAdManager.Instance;
 }
 
 void Start (){
-    //Fetch with floating behaviour
-    ggAdManager.FetchAdHead ("unit-1");
-    //Fetch at specific screen dpi.
-	ggAdManager.FetchAdHead ("unit-2", 300, 300);
+    //Fetch FloatAdLayout
+    ggAdManager.FetchAdHead ("float-123");
 }
 
 void OnDestroy (){
-    ggAdManager.RemoveAdHead ("unit-1")
-	ggAdManager.RemoveAdHead ("unit-2");
+    //Remove FloatAdLayout
+    ggAdManager.RemoveAllAdHead ();
 }
 ```
 
@@ -100,37 +86,37 @@ using GreedyGame.Platform;
 private GreedyAdManager ggAdManager = null;
 void Awake(){
 //Initialization as singleton
-	ggAdManager = GreedyAdManager.Instance;
+  ggAdManager = GreedyAdManager.Instance;
 }
 ```
 ---
 
 #### Init
-`init(String GameId, String[] AdUnits, OnGreedyEvent)`
+`init(String GameId, String[] AdUnits, Boolean isDebug, Boolean isLazyLoad, OnGreedyEvent)`
 
 Lookup for new native campaign from server.
 * GameId - Unique game profile id from panel.greedygame.com
 * AdUnits - Array register unit id. eg. Unit-XYZ
+* isDebug- To build debug app for testing
+* isLazyLoad- In case of true, it will show branded assets as soon as downloaded 
 * OnGreedyEvent - Callback function for **RuntimeEvent** as follow:
-	- CAMPAIGN_NOT_LOADED
-	- CAMPAIGN_LOADED
-	- CAMPAIGN_DOWNLOADED
-	- UNIT_OPENED
-	- UNIT_CLOSED
+  - CAMPAIGN_NOT_LOADED
+  - CAMPAIGN_LOADED
+  - CAMPAIGN_DOWNLOADED
 
 *Example*
 ```csharp
 void Start() {
-	if (isSupported) {
-		GlobalConfig[] ggLoaders = Resources.FindObjectsOfTypeAll<GlobalConfig> ();
-		if(ggLoaders != null && ggLoaders.Length != 1){
-			isSupported = false;
-			Debug.LogError("None or multuple occurrence of GlobalConfig object found!");
-			return;
-		}
-		GlobalConfig ggConfig = ggLoaders [0];
-		ggAdManager.init (ggConfig.GameId, ggConfig.AdUnits.ToArray (), OnGreedyEvent);
-	}
+  if (isSupported) {
+    GlobalConfig[] ggLoaders = Resources.FindObjectsOfTypeAll<GlobalConfig> ();
+    if(ggLoaders != null && ggLoaders.Length != 1){
+      isSupported = false;
+      Debug.LogError("None or multuple occurrence of GlobalConfig object found!");
+      return;
+    }
+    GlobalConfig ggConfig = ggLoaders [0];
+    ggAdManager.init (ggConfig.GameId, ggConfig.AdUnits.ToArray (), ggConfig.isDebug, ggConfig.isLazyLoad, OnGreedyEvent);
+  }
 }
 ```
 ---
@@ -143,17 +129,11 @@ Callback function for **RuntimeEvent**
 *Example*
 ```csharp
 void OnGreedyEvent(RuntimeEvent greedy_events){
-	if (greedy_events == RuntimeEvent.CAMPAIGN_LOADED || 
-	    greedy_events == RuntimeEvent.CAMPAIGN_NOT_LOADED) {
-	//Goto play scene if server reponse is recevied
-		Application.LoadLevel (PostLevel);
-	}
-
-	if (greedy_events == RuntimeEvent.UNIT_CLOSED){
-		//Do game resume, if click unit is closed
-	}else if(greedy_events == RuntimeEvent.UNIT_OPENED){
-		//Do game resume, if click unit is opened
-	}
+  if (greedy_events == RuntimeEvent.CAMPAIGN_LOADED || 
+      greedy_events == RuntimeEvent.CAMPAIGN_NOT_LOADED) {
+  //Goto play scene if server reponse is recevied
+    Application.LoadLevel (PostLevel);
+  }
 }
 ```
 ---
