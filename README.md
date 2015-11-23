@@ -30,9 +30,8 @@ This is a complete guide for integrating GreedyGame plugin within your unity gam
  3. MeshRender will be used as renderer to blend branding image over object
 
 #### 2. Setting up with Server
-* Using TopMenu: *GreedyGame > DynamicUnitManager*
-* Login using panel's credential.
-* Build and sync unit list.
+* Using TopMenu: *GreedyGame > AdUnitManager*
+* Click Save button to build list
 
 > Preview: list of units to be used for branding. Left list post refresh action and right list after save action.
 
