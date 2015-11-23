@@ -8,7 +8,7 @@ This is a complete guide for integrating GreedyGame plugin within your unity gam
 * Make account on panel.greedygame.com
 * Create game profile to get **GAME_PROFILE_ID**
 * Import GreedyGame_vX.Y.Z.package into your unity project
-* In unity, goto GreedyGame > AdUnitManager, use panel.greedygame.com's creditiional  to login
+* In unity, goto GreedyGame > AdUnitManager, use panel.greedygame.com's credentials to login
 
 ## Declaration of AdUnits
 ### Native Ads
