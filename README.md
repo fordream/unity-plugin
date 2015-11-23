@@ -10,7 +10,7 @@ This is a complete guide for integrating GreedyGame plugin within your unity gam
 * Import GreedyGame_vX.Y.Z.package into your unity project
 * In unity, goto GreedyGame > AdUnitManager, use panel.greedygame.com's creditiional  to login
 
-## Decleartion of AdUnits
+## Declaration of AdUnits
 ### Native Ads
 ![SharedAdUnit MonoBehaviour](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/1_branded_game.png?raw=true "SharedAdUnit MonoBehaviour attached to Stockcar/Body_Complete" )
 
