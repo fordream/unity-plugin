@@ -1,19 +1,24 @@
 GreedyGame Unity Integration Guide
 ===================
 
-This is a complete guide to integrate GreedyGame plugin within your unity game. You can download [GreedyGame_v7.4.4.unitypackage](current-sdk/GreedyGame_v7.4.4.unitypackage).
+This is a complete guide for integrating GreedyGame plugin within your unity game. You can download [GreedyGame_v7.4.4.unitypackage](current-sdk/GreedyGame_v7.4.4.unitypackage).
 
 
-## Import Plugin Package
-* **TopMenu**: *Assets > Import Package > Custom Package*
-* Import GreedyGame_v6.package into your unity project.
+## Setting up
+* In **panel.greedygame.com**
+ 1. Make account on panel.greedygame.com
+ 2. Create game profile to get **GAME_PROFILE_ID**
+* In **UnityEngine**
+ 1. Import GreedyGame_vX.Y.Z.package into your unity project
+ 2. Goto, Top Menu > GreedyGame > AdUnitManager, use panel.greedygame.com's creditiional  to login
+ 3. Assign **GAME_PROFILE_ID**, select LoadingLevel and save
 
-
-## Native Ads
+## Declaration of AdUnits
+### Native Ads
 ![SharedAdUnit MonoBehaviour](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/1_branded_game.png?raw=true "SharedAdUnit MonoBehaviour attached to Stockcar/Body_Complete" )
 
-### 1. Select GameObject for branding
-* Attach complie MonoBehaviour **AdUnit** or **SharedAdUnit**  to GameObject having **Renderer**.
+#### 1. Select GameObject for branding
+* Attach compiled MonoBehaviour **AdUnit** or **SharedAdUnit**  to GameObject having **Renderer**.
 * Supported Renderers are Mesh, Plan, Cloth and Sprite (only with SharedAdUnit).
 * GameObject must having 2D texture.
 
@@ -24,10 +29,9 @@ This is a complete guide to integrate GreedyGame plugin within your unity game. 
  2. 2D texture, will be used for branded assets, such as logo, product image etc.
  3. MeshRender will be used as renderer to blend branding image over object
 
-### 2. Setting up with Server
-* Using TopMenu: *GreedyGame > DynamicUnitManager*
-* Login using panel's credential.
-* Build and sync unit list.
+#### 2. Setting up with Server
+* Using TopMenu: *GreedyGame > AdUnitManager*
+* Click Save button to build list
 
 > Preview: list of units to be used for branding. Left list post refresh action and right list after save action.
 
@@ -36,10 +40,10 @@ This is a complete guide to integrate GreedyGame plugin within your unity game. 
  2. **LoadingLevel**, will be used for fetching and loading campaign assets
  3. **Save**, will upload images to server and create GlobalConfig objects at LoadingLevel
 
-### 3. Manage campagin fetching and post loading scene
+#### 3. Manage campagin fetching and post loading scene
 * Attach sample script `GreedyCampaignLoader.cs` with loading scene's object.
 
-## Floating Ad-Head
+### Floating Ad-Head
 
 ![SharedAdUnit MonoBehaviour](https://raw.githubusercontent.com/GreedyGame/Unity-Sample/master/screen-shots/7_float_ad.png?raw=true "SharedAdUnit MonoBehaviour attached to Stockcar/Body_Complete" )
 
