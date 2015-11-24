@@ -23,14 +23,16 @@ public class GreedyCampaignLoader : SingletoneBase<GreedyCampaignLoader>{
 	void Start() {
 		if (isSupported) {
 			GlobalConfig[] ggLoaders = Resources.FindObjectsOfTypeAll<GlobalConfig> ();
-			if(ggLoaders != null && ggLoaders.Length != 1){
+			if(ggLoaders == null || ggLoaders.Length == 0){
 				isSupported = false;
-				Debug.LogError("None or multuple occurrence of GlobalConfig object found!\nGoto GreedyGame > DynamicUnitManager > Save");
+				Debug.LogError("No occurrence of GlobalConfig object found!\nGoto GreedyGame > DynamicUnitManager > Save");
 				return;
 			}
 			GlobalConfig ggConfig = ggLoaders [0];
 			ggAdManager.init (ggConfig.GameId, ggConfig.AdUnits.ToArray (), ggConfig.isDebug, ggConfig.isLazyLoad, OnGreedyEvent);
 		}
+
+		Application.LoadLevel (1);
 	}
 	
 	void OnGUI () {
@@ -44,7 +46,7 @@ public class GreedyCampaignLoader : SingletoneBase<GreedyCampaignLoader>{
 		Debug.Log(String.Format("OnGreedyEvent - {0}", greedy_events));
 		if (greedy_events == RuntimeEvent.CAMPAIGN_LOADED || 
 		    greedy_events == RuntimeEvent.CAMPAIGN_NOT_LOADED) {
-			Application.LoadLevel (1);
+			//Application.LoadLevel (1);
 		}
 	}
 
