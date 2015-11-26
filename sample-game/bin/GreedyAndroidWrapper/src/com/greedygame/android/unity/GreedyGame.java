@@ -22,7 +22,7 @@ public class GreedyGame {
 
     protected static String TAG = "GreedyGame";
     private static GreedyGameAgent ggAgent = null;
-    private String gameObjectName;
+    private static String gameObjectName;
     private String version = "6.4";
     Activity gameActivity = null;
 
@@ -52,9 +52,9 @@ public class GreedyGame {
 	
 	public void init(String _gameObject, String _gameId, String []_units, boolean isEdit){
 		Log.i("GreedyGame", "_gameObject = "+_gameObject +", _gameId = "+_gameId +", isEdit = "+isEdit);
+		gameObjectName = _gameObject;
+		
 		try{
-			gameObjectName = _gameObject;
-			
 			//Remove null and empty
 			List<String> list = new ArrayList<String>(Arrays.asList(_units));
 			list.removeAll(Arrays.asList("", null));
@@ -71,6 +71,7 @@ public class GreedyGame {
 			
 		}catch(Exception e){
 			LogE("sdk error ", e);
+			UnityPlayer.UnitySendMessage(gameObjectName, "GG_onInit", "-1");
 		}
 	}
 
@@ -232,7 +233,8 @@ public class GreedyGame {
    			
    			UnityPlayer.UnitySendMessage(gameObjectName, "GG_onInit", Integer.toString(r));  	
 		}
-
+		
     }
+    
 
 }
